@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.homeloansystem.authentication.model.User;
 import com.homeloansystem.authentication.repository.UserRepository;
+import com.homeloansystem.authentication.service.UserService;
 
 @Controller
 @RequestMapping("/login")
 public class LoginController {
 	
 	@Autowired
-	UserRepository userRepo;
+	UserService usrService;
 	
 	@GetMapping
 	@ResponseBody
@@ -33,18 +34,13 @@ public class LoginController {
 	@ResponseBody
 	public String loginPost(String email, String password, HttpServletResponse response) {
 		System.out.println(email + " " + password);
-		User user = userRepo.findByEmail(email);
-		if (user == null) {
-			return "Password or Username is Wrong";
-		}
-		else {
+		String result = usrService.loginService(email, password);
+		if (result == "Signed In") {
 			Cookie cookie = new Cookie("email", email);
 			response.addCookie(cookie);
-			System.out.println(user);
-			System.out.println(user.getEmail());
-			System.out.print(user.getFirstName());
-			return "Signed In";
 		}
+		return result;
+		
 	}
 	
 	//Examples to Check

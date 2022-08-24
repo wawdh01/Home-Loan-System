@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.homeloansystem.authentication.model.User;
 import com.homeloansystem.authentication.repository.UserRepository;
+import com.homeloansystem.authentication.service.UserService;
 
 @Controller
 @RequestMapping("/register")
 public class RegisterController {
 	
 	@Autowired
-	UserRepository userRepo;
+	UserService usrService;
 	
 	@GetMapping
 	@ResponseBody
@@ -26,10 +27,8 @@ public class RegisterController {
 	@PostMapping
 	@ResponseBody
 	public String registerPost(String email, String first_name, String last_name, String password, int role) {
-		User user = new User(first_name, last_name, email, password, role);
-		userRepo.save(user);
-		System.out.println(email + " " + first_name + " " + last_name + " " + password);
-		return "Post Register";
+		String result = usrService.registerService(first_name, last_name, email, password, role);
+		return result;
 	}
 	
 }
